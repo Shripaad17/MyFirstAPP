@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI Joke Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body class="bg-gradient-to-tr from-blue-400 to-purple-600 min-h-screen flex items-center justify-center px-4">
+    <div class="bg-white bg-opacity-90 backdrop-blur-lg rounded-lg shadow-lg max-w-md w-full p-8 text-center">
+        <h1 class="text-3xl font-extrabold mb-6 text-gray-800">AI Joke Generator</h1>
+        <button id="jokeBtn" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-md w-full flex items-center justify-center space-x-3 transition-colors" >
+            <span>Tell me a joke</span>
+            <svg id="spinner" class="w-5 h-5 animate-spin text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+            </svg>
+        </button>
+        <p id="jokeText" class="mt-6 text-gray-700 text-lg min-h-[4rem]"></p>
+    </div>
+
+<script>
+const jokeBtn = document.getElementById('jokeBtn');
+const spinner = document.getElementById('spinner');
+const jokeText = document.getElementById('jokeText');
+
+jokeBtn.addEventListener('click', async () => {
+    jokeText.textContent = '';
+    spinner.classList.remove('hidden');
+    try {
+        const response = await fetch('/joke');
+        if (!response.ok) throw new Error('Network response was not ok');
+        const data = await response.json();
+        jokeText.textContent = data.joke;
+    } catch (error) {
+        jokeText.textContent = 'Oops! Something went wrong. Please try again.';
+    } finally {
+        spinner.classList.add('hidden');
+    }
+});
+</script>
+</body>
+</html>
